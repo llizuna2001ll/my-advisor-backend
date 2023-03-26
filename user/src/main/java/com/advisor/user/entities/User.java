@@ -1,5 +1,4 @@
 package com.advisor.user.entities;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
