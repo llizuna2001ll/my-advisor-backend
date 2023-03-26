@@ -19,6 +19,8 @@ public class UserService {
 
 
     public void addUser(User user){
+
+        System.out.println("user added 2");
         userRepository.insert(user);
     }
     public List<User> getAllUsers(){
