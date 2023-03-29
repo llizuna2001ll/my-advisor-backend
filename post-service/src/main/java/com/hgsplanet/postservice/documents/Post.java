@@ -28,7 +28,7 @@ public class Post {
     private String postImgPath;
     private Collection<Comment> comments = new ArrayList<>();
     private Collection<PostLike> postLikes = new ArrayList<>();
-    private String userId;
+    private String accountId;
     @Transient
     private User user;
 
@@ -38,7 +38,7 @@ public class Post {
                 .postDate(post.getPostDate())
                 .postImgPath(post.getPostImgPath())
                 .postDescription(post.getPostDescription())
-                .userId(post.getUserId())
+                .accountId(post.getAccountId())
                 .build();
     }
 }

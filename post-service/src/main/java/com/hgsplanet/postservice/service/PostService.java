@@ -20,7 +20,7 @@ public class PostService {
     }
 
     public PostDto addPost(PostDto post){
-        User user = userRestClient.findUserById(post.getUserId());
+        User user = userRestClient.findUserById(post.getAccountId());
         return PostDto.toDto(postRepository.save(Post.toEntity(post)));
     }
 
@@ -42,7 +42,7 @@ public class PostService {
 
     public Post getFullPost(String postId){
         Post post = postRepository.findById(postId).get();
-        post.setUser(userRestClient.findUserById(post.getUserId()));
+        post.setUser(userRestClient.findUserById(post.getAccountId()));
         return post;
     }
 }

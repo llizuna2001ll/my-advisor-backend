@@ -17,7 +17,7 @@ public class PostDto implements Serializable {
     private String postDescription;
     private LocalDateTime postDate;
     private String postImgPath;
-    private String userId;
+    private String accountId;
 
     public static PostDto toDto(Post post){
         return PostDto.builder()
@@ -25,7 +25,7 @@ public class PostDto implements Serializable {
                 .postDate(post.getPostDate())
                 .postImgPath(post.getPostImgPath())
                 .postDescription(post.getPostDescription())
-                .userId(post.getUserId())
+                .accountId(post.getAccountId())
                 .build();
     }
 }

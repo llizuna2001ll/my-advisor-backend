@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/UserMicroservice/UserMicroservice.iml" filepath="$PROJECT_DIR$/UserMicroservice/UserMicroservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/comment-service/comment-service.iml" filepath="$PROJECT_DIR$/comment-service/comment-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/discovey-service/discovey-service.iml" filepath="$PROJECT_DIR$/discovey-service/discovey-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/gateway/gateway.iml" filepath="$PROJECT_DIR$/gateway/gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/my-advisor-backend.iml" filepath="$PROJECT_DIR$/.idea/my-advisor-backend.iml" />
