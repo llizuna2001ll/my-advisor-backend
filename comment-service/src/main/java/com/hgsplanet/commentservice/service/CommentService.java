@@ -29,6 +29,10 @@ public class CommentService {
         return commentRepository.findById(id).orElseThrow(()-> new RuntimeException("Comment Not Found"));
     }
 
+    public List<Comment> getAllByPostId(String id){
+        return commentRepository.findByPostId(id);
+    }
+
     public List<Comment> findAllComments(){
         return commentRepository.findAll();
     }

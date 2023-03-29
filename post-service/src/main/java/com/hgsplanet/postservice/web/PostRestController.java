@@ -50,7 +50,7 @@ public class PostRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/fullPost/{id}")
+    @GetMapping("/getFullPost/{id}")
     ResponseEntity<Post> getFullPost(@PathVariable("id") String id){
         Post post = postService.getFullPost(id);
         return new ResponseEntity<>(post, HttpStatus.OK);

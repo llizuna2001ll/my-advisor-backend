@@ -4,7 +4,7 @@ import com.hgsplanet.postservice.dao.PostRepository;
 import com.hgsplanet.postservice.documents.Post;
 import com.hgsplanet.postservice.dto.PostDto;
 import com.hgsplanet.postservice.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hgsplanet.postservice.web.UserRestClient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +20,6 @@ public class PostService {
     }
 
     public PostDto addPost(PostDto post){
-        User user = userRestClient.findUserById(post.getAccountId());
         return PostDto.toDto(postRepository.save(Post.toEntity(post)));
     }
 
