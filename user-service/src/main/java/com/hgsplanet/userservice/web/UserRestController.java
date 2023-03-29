@@ -2,7 +2,7 @@ package com.hgsplanet.userservice.web;
 
 import com.hgsplanet.userservice.service.UserService;
 import com.hgsplanet.userservice.dto.UserDto;
-import com.hgsplanet.userservice.entities.User;
+import com.hgsplanet.userservice.documents.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +40,7 @@ public class UserRestController {
     }
 
     @PutMapping("/updateUser/{id}")
-    ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto user) {
+    ResponseEntity<UserDto> updateUser(@PathVariable String id, @RequestBody UserDto user) {
         UserDto updateUser = userService.updateUser(user);
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }

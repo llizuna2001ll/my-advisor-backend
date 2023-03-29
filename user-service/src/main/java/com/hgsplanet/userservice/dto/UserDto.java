@@ -1,6 +1,6 @@
 package com.hgsplanet.userservice.dto;
 
-import com.hgsplanet.userservice.entities.User;
+import com.hgsplanet.userservice.documents.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

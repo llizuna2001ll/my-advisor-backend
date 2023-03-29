@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/discovey-service/discovey-service.iml" filepath="$PROJECT_DIR$/discovey-service/discovey-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/gateway/gateway.iml" filepath="$PROJECT_DIR$/gateway/gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/my-advisor-backend.iml" filepath="$PROJECT_DIR$/.idea/my-advisor-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/post-service/post-service.iml" filepath="$PROJECT_DIR$/post-service/post-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/user-service/user-service.iml" filepath="$PROJECT_DIR$/user-service/user-service.iml" />
     </modules>
   </component>
