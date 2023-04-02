@@ -1,10 +1,12 @@
 package com.hgsplanet.userservice.web;
 
+import com.hgsplanet.userservice.enums.RelationWithUser;
 import com.hgsplanet.userservice.service.UserService;
 import com.hgsplanet.userservice.dto.UserDto;
 import com.hgsplanet.userservice.documents.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,11 +47,25 @@ public class UserRestController {
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 
+    @Secured("ADMIN")
     @DeleteMapping("/deleteUser/{id}")
     ResponseEntity<UserDto> deleteUser(@PathVariable("id") String id) {
         userService.deleteUserById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/addCity")
+    ResponseEntity<UserDto> addCity(@RequestParam String userId, @RequestParam String cityId, @RequestParam RelationWithUser relationWithUser) {
+        userService.assignCity(userId, cityId, relationWithUser);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/removeCity")
+    ResponseEntity<UserDto> removeCity(@RequestParam String userId, @RequestParam String cityId) {
+        userService.removeCity(userId, cityId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 
 }

@@ -3,8 +3,7 @@ package com.hgsplanet.postservice.service;
 import com.hgsplanet.postservice.dao.PostRepository;
 import com.hgsplanet.postservice.documents.Post;
 import com.hgsplanet.postservice.dto.PostDto;
-import com.hgsplanet.postservice.model.User;
-import com.hgsplanet.postservice.web.UserRestClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +12,13 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRestClient userRestClient;
+    private final CommentRestClient commentRestClient;
 
-    public PostService(PostRepository postRepository, UserRestClient userRestClient) {
+    @Autowired
+    public PostService(PostRepository postRepository, UserRestClient userRestClient, CommentRestClient commentRestClient) {
         this.postRepository = postRepository;
         this.userRestClient = userRestClient;
+        this.commentRestClient = commentRestClient;
     }
 
     public PostDto addPost(PostDto post){
@@ -42,6 +44,8 @@ public class PostService {
     public Post getFullPost(String postId){
         Post post = postRepository.findById(postId).get();
         post.setUser(userRestClient.findUserById(post.getAccountId()));
+
+        post.setComments(commentRestClient.getAllByPostId(postId));
         return post;
     }
 }

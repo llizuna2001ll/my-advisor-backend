@@ -55,9 +55,9 @@ public class CommentRestController {
         return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 
-    @GetMapping("/post/{id}")
-    ResponseEntity<List<Comment>> getAllByPostId(String id){
-        List<Comment> comments = commentService.getAllByPostId(id);
+    @GetMapping("/post")
+    ResponseEntity<List<Comment>> getAllByPostId(@RequestParam String postId){
+        List<Comment> comments = commentService.getAllByPostId(postId);
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 }

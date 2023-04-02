@@ -1,6 +1,8 @@
 package com.hgsplanet.userservice.documents;
 
 import com.hgsplanet.userservice.dto.UserDto;
+import com.hgsplanet.userservice.enums.RelationWithUser;
+import com.hgsplanet.userservice.enums.Role;
 import com.hgsplanet.userservice.model.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,17 +10,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
 @Document(collection = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     private String accountId;
@@ -28,11 +32,12 @@ public class User {
     private LocalDateTime creationTime;
     private String profileImgPath;
     private String phoneNum;
+    private Role role;
     private Collection<Post> posts = new ArrayList<>();
     private Collection<Notification> notifications = new ArrayList<>();
     private Collection<Comment> comments = new ArrayList<>();
     private Collection<PostLike> postLikes = new ArrayList<>();
-    private Collection<City> visitedCities = new ArrayList<>();
+    private Map<String, RelationWithUser> visitedCities = new HashMap<>();
 
 
     public static User toEntity(UserDto user){
@@ -45,6 +50,31 @@ public class User {
                 .profileImgPath(user.getProfileImgPath())
                 .phoneNum(user.getPhoneNum())
                 .build();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
 

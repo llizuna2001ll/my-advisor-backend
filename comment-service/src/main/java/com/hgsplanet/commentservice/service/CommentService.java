@@ -4,6 +4,8 @@ import com.hgsplanet.commentservice.dao.CommentRepository;
 import com.hgsplanet.commentservice.documents.Comment;
 import com.hgsplanet.commentservice.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +32,7 @@ public class CommentService {
     }
 
     public List<Comment> getAllByPostId(String id){
-        return commentRepository.findByPostId(id);
+        return commentRepository.findAllByPostId(id);
     }
 
     public List<Comment> findAllComments(){

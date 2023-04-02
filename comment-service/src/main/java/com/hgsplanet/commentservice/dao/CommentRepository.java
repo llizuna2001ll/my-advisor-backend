@@ -9,6 +9,5 @@ import java.util.List;
 
 @RepositoryRestResource
 public interface CommentRepository extends MongoRepository<Comment, String> {
-    @Query("{ 'postId' : ?0 }")
-    public List<Comment> findByPostId(String postId);
+    public List<Comment> findAllByPostId(String postId);
 }

@@ -22,7 +22,7 @@ import java.util.Collection;
 @Builder
 @Data
 @Document(collection = "posts")
-public class Post implements Serializable {
+public class Post{
     @Id
     private String postId;
     private String postDescription;
