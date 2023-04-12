@@ -5,6 +5,7 @@ import com.advisor.user.repositories.UserRepository;
 import com.advisor.user.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -39,6 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+   // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Optional<User>> getUserById(@PathVariable String id){
         return ResponseEntity.ok(userService.getUserById(id));
     }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/posts")
+@RequestMapping("/api/v1/post")
 
 public class PostController {
 private final PostRepository postRepository;
@@ -33,17 +33,24 @@ private final PostService postService;
         return new ResponseEntity<>(post, HttpStatus.OK);
 
     }
-    @GetMapping("/find")
-    ResponseEntity <List<Post>> findByUser(@RequestBody User user){
+
+    @GetMapping
+   /* ResponseEntity <List<Post>> findByUser(@RequestBody User user){
         List<Post> post = postService.findByUser(user);
         return new ResponseEntity<>(post, HttpStatus.OK);
 
+    }*/
+    ResponseEntity<List<Post>> getAllPosts(){
+        List<Post> posts = postService.getAllPosts();
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
+
     @PutMapping("/update/{id}")
     ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto){
         PostDto postDto1 = postService.updatePost(postDto);
         return new ResponseEntity<>(postDto1, HttpStatus.OK);
     }
+
     @DeleteMapping("/delete/{id}")
     ResponseEntity<Post> deletePost(@PathVariable String id){
         postService.deletePost(id);

@@ -23,8 +23,8 @@ public class Post {
     private String id;
     @Field(name = "user")
     private User user;
-    @Field(name = "target")
-    private Business target;
+    @Field(name = "business")
+    private Business business;
     @Field(name = "content")
     private String content;
     @Field(name = "image")

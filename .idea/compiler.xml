@@ -6,16 +6,28 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="UserMicroservice" />
+        <module name="GatewayMicroService" />
+        <module name="PostMicroService" />
+        <module name="user" />
+        <module name="discovery_service" />
+        <module name="businessMicroService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="UserMicroservice" target="17" />
+      <module name="businessMicroService" target="17" />
+      <module name="discovery_service" target="17" />
+      <module name="GatewayMicroService" target="17" />
+      <module name="PostMicroService" target="17" />
+      <module name="user" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="UserMicroservice" options="-parameters" />
+      <module name="GatewayMicroService" options="-parameters" />
+      <module name="PostMicroService" options="-parameters" />
+      <module name="businessMicroService" options="-parameters" />
+      <module name="discovery_service" options="-parameters" />
+      <module name="user" options="-parameters" />
     </option>
   </component>
 </project>

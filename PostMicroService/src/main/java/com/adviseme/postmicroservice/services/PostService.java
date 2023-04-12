@@ -22,10 +22,15 @@ public Post getPostById(String id){
         return postRepository.findById(id).orElseThrow(()->new
                 RuntimeException("post not found"));
 }
-public List<Post> findByUser(User user){
+/*public List<Post> findByUser(User user){
         return postRepository.findByUser(user);
 
 }
+ */
+public List<Post> getAllPosts(){
+    return postRepository.findAll();
+}
+
 public void deletePost(String id){
         postRepository.deleteById(id);
 }
