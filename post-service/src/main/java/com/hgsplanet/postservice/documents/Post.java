@@ -30,7 +30,8 @@ public class Post{
     private String postImgPath;
     private Collection<Comment> comments = new ArrayList<>();
     private Collection<PostLike> postLikes = new ArrayList<>();
-    private String accountId;
+    private String accountUsername;
+    private String businessName;
     @Transient
     private User user;
 
@@ -40,7 +41,8 @@ public class Post{
                 .postDate(post.getPostDate())
                 .postImgPath(post.getPostImgPath())
                 .postDescription(post.getPostDescription())
-                .accountId(post.getAccountId())
+                .accountUsername(post.getAccountUsername())
+                .businessName(post.getBusinessName())
                 .build();
     }
 }

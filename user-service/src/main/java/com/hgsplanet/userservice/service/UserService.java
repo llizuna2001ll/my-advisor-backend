@@ -3,12 +3,16 @@ package com.hgsplanet.userservice.service;
 import com.hgsplanet.userservice.dao.CityRepository;
 import com.hgsplanet.userservice.dao.UserRepository;
 import com.hgsplanet.userservice.documents.City;
+import com.hgsplanet.userservice.dto.BusinessDto;
 import com.hgsplanet.userservice.dto.UserDto;
 import com.hgsplanet.userservice.documents.User;
 import com.hgsplanet.userservice.enums.RelationWithUser;
+import com.hgsplanet.userservice.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +21,7 @@ import java.util.Map;
 public class UserService {
     private final UserRepository userRepository;
     private final CityRepository cityRepository;
+
     @Autowired
     public UserService(UserRepository userRepository, CityRepository cityRepository) {
         this.userRepository = userRepository;
@@ -24,11 +29,32 @@ public class UserService {
     }
 
     public UserDto addUser(UserDto user) {
+        User existingUser = userRepository.findByUsername(user.getUsername());
+        if (existingUser != null) {
+            throw new IllegalArgumentException("Username already taken");
+        }
         return UserDto.toDto(userRepository.save(User.toEntity(user)));
+    }
+
+    public BusinessDto addBusiness(BusinessDto business) {
+        User existingUser = userRepository.findByUsername(business.getUsername());
+        if (existingUser != null) {
+            throw new IllegalArgumentException("Username already taken");
+        }
+        return BusinessDto.toBusinessDto(userRepository.save(User.toBusiness(business)));
     }
 
     public User findUserById(String id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User Not Found"));
+    }
+
+    public UserDto findUserByUsername(String username) {
+        try {
+            User user = userRepository.findByUsername(username);
+            return UserDto.toDto(user);
+        }catch (RuntimeException e) {
+            throw new RuntimeException("User Not Found");
+        }
     }
 
     public List<User> findAllUsers() {
@@ -39,25 +65,48 @@ public class UserService {
         return UserDto.toDto(userRepository.save(User.toEntity(user)));
     }
 
-    public void deleteUserById(String id) {
-        userRepository.deleteById(id);
+    public void deleteUserByUsername(String username) {
+        userRepository.deleteByUsername(username);
     }
 
-    public void assignCity(String userId, String cityId, RelationWithUser relationWithUser){
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Not Found"));
-        Map<String, RelationWithUser> cities = user.getVisitedCities();
-        City city = cityRepository.findById(cityId).orElseThrow(() -> new RuntimeException("City Not Found"));
-        cities.put(city.getName(), relationWithUser);
-        user.setVisitedCities(cities);
-        userRepository.save(user);
+    public void assignCity(String username, String cityId, RelationWithUser relationWithUser) {
+        try {
+            User user = userRepository.findByUsername(username);
+            Map<String, RelationWithUser> cities = user.getVisitedCities();
+            City city = cityRepository.findById(cityId).orElseThrow(() -> new RuntimeException("City Not Found"));
+            cities.put(city.getName(), relationWithUser);
+            user.setVisitedCities(cities);
+            userRepository.save(user);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("User Not Found");
+        }
     }
 
-    public void removeCity(String userId, String cityId){
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Not Found"));
-        Map<String, RelationWithUser> cities = user.getVisitedCities();
-        City city = cityRepository.findById(cityId).orElseThrow(() -> new RuntimeException("City Not Found"));
-        cities.remove(city.getName());
-        user.setVisitedCities(cities);
-        userRepository.save(user);
+    public void removeCity(String username, String cityId) {
+        try {
+            User user = userRepository.findByUsername(username);
+            Map<String, RelationWithUser> cities = user.getVisitedCities();
+            City city = cityRepository.findById(cityId).orElseThrow(() -> new RuntimeException("City Not Found"));
+            cities.remove(city.getName());
+            user.setVisitedCities(cities);
+            userRepository.save(user);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("User Not Found");
+        }
+    }
+
+    public void assignRole(String username, String role) {
+        try {
+            User user = userRepository.findByUsername(username);
+            Collection<Role> roles = user.getRoles();
+            if (role.equals("ADMIN"))
+                roles.add(Role.ADMIN);
+            else if (role.equals("Business"))
+                roles.add(Role.BUSINESS);
+            user.setRoles(roles);
+            userRepository.save(user);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("User Not Found");
+        }
     }
 }

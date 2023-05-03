@@ -5,9 +5,6 @@ import com.hgsplanet.userservice.documents.City;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -38,10 +35,6 @@ public class CityService {
 
     public void deleteCityById(String id) {
         cityRepository.deleteById(id);
-    }
-
-    public Collection<City> getAllCitiesById(String id){
-        return cityRepository.findAllByCityId(id);
     }
 
 }

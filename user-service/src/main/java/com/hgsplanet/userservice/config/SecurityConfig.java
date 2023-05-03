@@ -26,8 +26,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers("/api/v1/auth/**")
                 .permitAll()
-                .antMatchers("/api/v1/cities/**")
-                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

@@ -1,7 +1,5 @@
 package com.hgsplanet.userservice.model;
 
-import com.hgsplanet.userservice.documents.City;
-import com.hgsplanet.userservice.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class BusinessRegisterRequest {
 
     @NotBlank(message = "username should not be empty")
     @Indexed(unique = true)
@@ -35,6 +33,15 @@ public class RegisterRequest {
     @Pattern(regexp = "^[0-9]*$", message = "Invalid phone number")
     private String phoneNum;
 
+    @NotBlank(message = "opening time should not be empty")
+    private String openingTime;
+
+    @NotBlank(message = "closing time should not be empty")
+    private String closingTime;
+
+    @NotBlank(message = "city should not be empty")
+    private String city;
+    private String businessType;
     private LocalDateTime creationTime;
 
 }

@@ -7,10 +7,36 @@ spring:
     discovery:
       enabled: true
     gateway:
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/v1/users/**
+          filters:
+            - AuthenticationFilter
+
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/v1/auth/**
+
+        - id: post-service
+          uri: lb://POST-SERVICE
+          predicates:
+            - Path=/api/v1/posts/**
+          filters:
+            - AuthenticationFilter
+
+        - id: comment-service
+          uri: lb://COMMENT-SERVICE
+          predicates:
+            - Path=/api/v1/comments/**
+          filters:
+            - AuthenticationFilter
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://localhost:4200"
+            allowedOrigins: "http://localhost:3000"
             allowedHeaders: "*"
             allowedMethods:
               - GET

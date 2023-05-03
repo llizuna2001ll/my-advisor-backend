@@ -10,6 +10,7 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
+
 @SpringBootApplication
 @EnableEurekaClient
 public class GatewayApplication {
@@ -23,7 +24,7 @@ public class GatewayApplication {
                 .route(r -> r.path("/users/**").uri("lb://USER-SERVICE"))
                 .build();
     }
-    @Bean
+
     public DiscoveryClientRouteDefinitionLocator dynamicRoutes(ReactiveDiscoveryClient rdc,
                                                                DiscoveryLocatorProperties dlp){
         return new DiscoveryClientRouteDefinitionLocator(rdc, dlp);

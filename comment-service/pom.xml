@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.hgs-planet</groupId>
-    <artifactId>user-service</artifactId>
+    <artifactId>comment-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user-service</name>
-    <description>user-service</description>
+    <name>comment-service</name>
+    <description>comment-service</description>
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2021.0.6</spring-cloud.version>
