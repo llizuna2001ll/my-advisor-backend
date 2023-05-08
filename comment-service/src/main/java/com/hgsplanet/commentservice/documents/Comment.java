@@ -22,7 +22,7 @@ public class Comment {
     private String commentId;
     private String commentText;
     private LocalDateTime commentDate;
-    private String accountId;
+    private String accountUsername;
     private String postId;
     @Transient
     private Post post;

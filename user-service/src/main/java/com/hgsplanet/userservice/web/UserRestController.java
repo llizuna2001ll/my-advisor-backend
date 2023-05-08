@@ -38,8 +38,8 @@ public class UserRestController {
     }
 
     @GetMapping("/services/{username}")
-    UserDto getUserByUsernameForServices(@PathVariable String username) {
-        UserDto user = userService.findUserByUsername(username);
+    User getUserByUsernameForServices(@PathVariable String username) {
+        User user = userService.findFullUserByUsername(username);
         return user;
     }
 
@@ -51,14 +51,14 @@ public class UserRestController {
 
 
     @PutMapping("/updateUser")
-    ResponseEntity<UserDto> updateUser(@RequestBody UserDto user) {
-        UserDto updateUser = userService.updateUser(user);
+    ResponseEntity<User> updateUser(@RequestBody User user) {
+        User updateUser = userService.updateUser(user);
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 
     @PutMapping("/services/updateUser")
-    UserDto updateUserForServices(@RequestBody UserDto user) {
-        UserDto updateUser = userService.updateUser(user);
+        User updateUserForServices(@RequestBody User user) {
+        User updateUser = userService.updateUser(user);
         return updateUser;
     }
 

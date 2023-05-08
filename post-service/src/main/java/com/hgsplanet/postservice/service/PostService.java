@@ -25,16 +25,14 @@ public class PostService {
     }
 
     public PostDto addPost(PostDto post){
-        String authorization = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9LHsiYXV0aG9yaXR5IjoiQURNSU4ifV0sInN1YiI6Iml6dW5hLXRlc3QyIiwiaWF0IjoxNjgzMTEwODgzLCJleHAiOjE2ODMxMTIzMjN9.MCsI8yIfuv6pVSSP2Hxxdvfs--3gwG3OW5qfIUHoJVw";
-        User user = userRestClient.findUserByUsernameForServices(post.getAccountUsername(), authorization);
-        User business = userRestClient.findUserByUsernameForServices(post.getAccountUsername(), authorization);
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiQlVTSU5FU1MifV0sInN1YiI6Iml6dW5hLWJ1c2luZXNzIiwiaWF0IjoxNjgzNTA4MDE0LCJleHAiOjE2ODM1MDk0NTR9.lsNqDl7kzsfEmnEnhsoRSmtZkk0hveaz6EJKk8GILqw";
+        String authorization = "Bearer "+token;
+        User user = userRestClient.findFullUserByUsernameForServices(post.getAccountUsername(), authorization);
+        User business = userRestClient.findFullUserByUsernameForServices(post.getAccountUsername(), authorization);
+        System.out.println(user.getUsername());
+        System.out.println(business.getUsername());
         post.setPostDate(LocalDateTime.now());
-        Collection<PostDto> posts = user.getPosts();
-        Collection<PostDto> businessPosts = user.getPostsAboutBusiness();
-        businessPosts.add(post);
-        posts.add(post);
-        userRestClient.updateUserForServices(business, authorization);
-        userRestClient.updateUserForServices(user, authorization);
+
         return PostDto.toDto(postRepository.save(Post.toEntity(post)));
     }
 
@@ -55,9 +53,10 @@ public class PostService {
     }
 
     public Post getFullPost(String postId){
-        String authorization = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9LHsiYXV0aG9yaXR5IjoiQURNSU4ifV0sInN1YiI6Iml6dW5hLXRlc3QyIiwiaWF0IjoxNjgzMTEwODgzLCJleHAiOjE2ODMxMTIzMjN9.MCsI8yIfuv6pVSSP2Hxxdvfs--3gwG3OW5qfIUHoJVw";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiQlVTSU5FU1MifV0sInN1YiI6Iml6dW5hLWJ1c2luZXNzIiwiaWF0IjoxNjgzNTA4MDE0LCJleHAiOjE2ODM1MDk0NTR9.lsNqDl7kzsfEmnEnhsoRSmtZkk0hveaz6EJKk8GILqw";
+        String authorization = "Bearer "+token;
         Post post = postRepository.findById(postId).get();
-        post.setUser(userRestClient.findUserByUsernameForServices(post.getAccountUsername(), authorization));
+        post.setUser(userRestClient.findFullUserByUsernameForServices(post.getAccountUsername(), authorization));
         post.setComments(commentRestClient.getAllByPostId(postId));
         return post;
     }

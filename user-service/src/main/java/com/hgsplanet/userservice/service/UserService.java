@@ -51,7 +51,18 @@ public class UserService {
     public UserDto findUserByUsername(String username) {
         try {
             User user = userRepository.findByUsername(username);
-            return UserDto.toDto(user);
+            UserDto userDto = UserDto.toDto(user);
+            userDto.setAccountId(user.getAccountId());
+            return userDto;
+        }catch (RuntimeException e) {
+            throw new RuntimeException("User Not Found");
+        }
+    }
+
+    public User findFullUserByUsername(String username) {
+        try {
+            User user = userRepository.findByUsername(username);
+            return user;
         }catch (RuntimeException e) {
             throw new RuntimeException("User Not Found");
         }
@@ -61,8 +72,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public UserDto updateUser(UserDto user) {
-        return UserDto.toDto(userRepository.save(User.toEntity(user)));
+    public User updateUser(User user) {
+        return userRepository.save(user);
     }
 
     public void deleteUserByUsername(String username) {

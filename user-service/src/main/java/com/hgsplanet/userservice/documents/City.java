@@ -17,4 +17,5 @@ public class City {
     @Id
     private String cityId;
     private String name;
+    private String imgPath;
 }

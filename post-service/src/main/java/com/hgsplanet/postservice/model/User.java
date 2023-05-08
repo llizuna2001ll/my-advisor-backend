@@ -11,6 +11,4 @@ public class User {
     private String accountId;
     private String username;
     private String profileImgPath;
-    private Collection<PostDto> posts = new ArrayList<>();
-    private Collection<PostDto> postsAboutBusiness = new ArrayList<>();
 }
