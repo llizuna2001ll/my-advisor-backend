@@ -12,18 +12,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Builder
 @Data
-@Document(collection = "cities")
-public class City implements Comparable<City> {
+@Document(collection = "business-types")
+public class BusinessType {
     @Id
-    private String cityId;
+    private String typeId;
     @Indexed(unique = true)
-    private String name;
-    private String cityDescription;
+    private String typeName;
     private String imgPath;
     private int businessCount;
-
-    @Override
-    public int compareTo(City otherCity) {
-        return Integer.compare(otherCity.businessCount, this.businessCount);
-    }
 }

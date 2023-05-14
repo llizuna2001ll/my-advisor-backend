@@ -1,5 +1,6 @@
 package com.hgsplanet.userservice.documents;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hgsplanet.userservice.dto.BusinessDto;
 import com.hgsplanet.userservice.dto.UserDto;
 import com.hgsplanet.userservice.enums.RelationWithUser;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,35 +31,27 @@ public class User implements UserDetails {
 
     @Id
     private String accountId;
-
-    @NotBlank(message = "username should not be empty")
-    @Size(max = 20, min = 5)
     @Indexed(unique = true)
     private String username;
 
-    @NotBlank(message = "email should not be empty")
-    @Email(message = "Email not valid")
     private String email;
-
-    @NotBlank(message = "password should not be empty")
-    @Size(min = 6, max = 30)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @NotNull
     private LocalDateTime creationTime;
 
     private String profileImgPath;
 
-    @NotBlank(message = "phone number should not be empty")
-    @Pattern(regexp = "^[0-9]*$", message = "Invalid phone number")
     private String phoneNum;
 
 
     //Exclusif for business users
+    private String businessDescription;
     private String city;
     private String openingTime;
     private String closingTime;
     private String businessType;
+    private Double rating;
     private Collection<Post> postsAboutBusiness = new ArrayList<>();
 
 
@@ -92,10 +86,11 @@ public class User implements UserDetails {
                 .phoneNum(business.getPhoneNum())
                 .openingTime(business.getOpeningTime())
                 .closingTime(business.getClosingTime())
+                .city(business.getCity())
                 .businessType(business.getBusinessType())
                 .build();
     }
-
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -105,21 +100,25 @@ public class User implements UserDetails {
         return authorities;
     }
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public boolean isEnabled() {
         return true;

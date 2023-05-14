@@ -26,13 +26,17 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final CityService cityService;
+    private final BusinessTypeService businessTypeService;
 
-    public AuthenticationService(UserRepository userRepository, UserService userService, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthenticationService(UserRepository userRepository, UserService userService, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, CityService cityService, BusinessTypeService businessTypeService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.cityService = cityService;
+        this.businessTypeService = businessTypeService;
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
@@ -67,6 +71,8 @@ public class AuthenticationService {
                 .closingTime(request.getClosingTime())
                 .businessType(request.getBusinessType())
                 .build();
+        cityService.increaseCount(request.getCity());
+        businessTypeService.increaseCount(request.getBusinessType());
         userService.addBusiness(BusinessDto.toBusinessDto(business));
 
         var jwtToken = jwtService.generateToken(business);

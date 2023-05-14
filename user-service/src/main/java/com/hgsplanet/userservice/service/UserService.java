@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -110,14 +111,34 @@ public class UserService {
         try {
             User user = userRepository.findByUsername(username);
             Collection<Role> roles = user.getRoles();
-            if (role.equals("ADMIN"))
+            if (role.equals("admin"))
                 roles.add(Role.ADMIN);
-            else if (role.equals("Business"))
+            else if (role.equals("business"))
                 roles.add(Role.BUSINESS);
             user.setRoles(roles);
             userRepository.save(user);
         } catch (RuntimeException e) {
             throw new RuntimeException("User Not Found");
         }
+    }
+
+    public Collection<User> findBusinessByCity(String city){
+        Collection<User> users = userRepository.findByCityAndRoles(city, Role.BUSINESS);
+        Collection<UserDto> userDtos = new ArrayList<>();
+        for(User user : users){
+            userDtos.add(UserDto.toDto(user));
+        }
+        return users;
+    }
+
+    public Collection<User> filterBusiness(Double rating, List<String> businessTypes, String city){
+        Collection<User> users = userRepository.filterBusiness(rating, businessTypes, city, Role.BUSINESS);
+        return users;
+    }
+
+    public Collection<User> findTopBusinesses(){
+        Collection<User> users = userRepository.findTop4ByRolesOrderByRatingDesc(Role.BUSINESS);
+        System.out.println(users);
+        return users;
     }
 }

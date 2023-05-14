@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @Validated
@@ -80,10 +81,28 @@ public class UserRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/assignRole")
+    @PostMapping("/assignRole/admin")
     ResponseEntity<UserDto> assignRole(@RequestParam String role, @RequestParam String username) {
         userService.assignRole(username, role);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/findBusinessByCity/{city}")
+    ResponseEntity<Collection<User>> findBusinessByCity(@PathVariable String city) {
+        Collection<User> users = userService.findBusinessByCity(city);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/filterBusiness")
+    ResponseEntity<Collection<User>> filterBusiness(@RequestParam Double rating, @RequestParam List<String> businessTypes, @RequestParam String city) {
+        Collection<User> users = userService.filterBusiness(rating, businessTypes, city);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/topBusinesses")
+    ResponseEntity<Collection<User>> findTopBusinesses() {
+        Collection<User> users = userService.findTopBusinesses();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 }
 

@@ -37,6 +37,7 @@ public class BusinessDto {
                 .phoneNum(business.getPhoneNum())
                 .openingTime(business.getOpeningTime())
                 .closingTime(business.getClosingTime())
+                .city(business.getCity())
                 .businessType(business.getBusinessType())
                 .build();
     }
