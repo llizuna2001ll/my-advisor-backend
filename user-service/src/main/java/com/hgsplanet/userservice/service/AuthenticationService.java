@@ -70,6 +70,8 @@ public class AuthenticationService {
                 .openingTime(request.getOpeningTime())
                 .closingTime(request.getClosingTime())
                 .businessType(request.getBusinessType())
+                .rating(0d)
+                .ratingCounter(0)
                 .build();
         cityService.increaseCount(request.getCity());
         businessTypeService.increaseCount(request.getBusinessType());

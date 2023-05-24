@@ -15,6 +15,19 @@ spring:
           filters:
             - AuthenticationFilter
 
+        - id: notification-service
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/api/v1/notifications/**
+          filters:
+            - AuthenticationFilter
+        - id: conversation-service
+          uri: lb://CONVERSATION-SERVICE
+          predicates:
+            - Path=/api/v1/conversations/**
+          filters:
+            - AuthenticationFilter
+
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:

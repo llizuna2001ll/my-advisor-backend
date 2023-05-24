@@ -25,24 +25,29 @@ import java.util.Collection;
 public class Post{
     @Id
     private String postId;
+    private String postTitle;
     private String postDescription;
+    private Double postRating;
     private LocalDateTime postDate;
     private String postImgPath;
     private Collection<Comment> comments = new ArrayList<>();
-    private Collection<PostLike> postLikes = new ArrayList<>();
+    private Collection<PostLike> likes = new ArrayList<>();
     private String accountUsername;
     private String businessName;
     @Transient
-    private User user;
+    User user;
+
 
     public static Post toEntity(PostDto post){
         return Post.builder()
                 .postId(post.getPostId())
+                .postTitle(post.getPostTitle())
                 .postDate(post.getPostDate())
                 .postImgPath(post.getPostImgPath())
                 .postDescription(post.getPostDescription())
                 .accountUsername(post.getAccountUsername())
                 .businessName(post.getBusinessName())
+                .postRating(post.getPostRating())
                 .build();
     }
 }

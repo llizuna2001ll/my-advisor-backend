@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,7 +17,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -33,17 +31,12 @@ public class User implements UserDetails {
     private String accountId;
     @Indexed(unique = true)
     private String username;
-
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
     private LocalDateTime creationTime;
-
     private String profileImgPath;
-
     private String phoneNum;
-
 
     //Exclusif for business users
     private String businessDescription;
@@ -52,14 +45,18 @@ public class User implements UserDetails {
     private String closingTime;
     private String businessType;
     private Double rating;
-    private Collection<Post> postsAboutBusiness = new ArrayList<>();
+    private Collection<Double> ratings;
+    private int ratingCounter;
+    private Collection<String> imgPaths = new ArrayList<>();
 
 
     private Collection<Role> roles;
     private Collection<Post> posts = new ArrayList<>();
+    private Collection<PostLike> likes = new ArrayList<>();
+    private Collection<String> favorites = new ArrayList<>();
+    private Collection<String> fans = new ArrayList<>();
     private Collection<Notification> notifications = new ArrayList<>();
     private Collection<Comment> comments = new ArrayList<>();
-    private Collection<PostLike> postLikes = new ArrayList<>();
     private Map<String, RelationWithUser> visitedCities = new HashMap<>();
 
 
@@ -124,5 +121,3 @@ public class User implements UserDetails {
         return true;
     }
 }
-
-

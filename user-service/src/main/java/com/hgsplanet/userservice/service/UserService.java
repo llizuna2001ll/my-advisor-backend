@@ -8,6 +8,8 @@ import com.hgsplanet.userservice.dto.UserDto;
 import com.hgsplanet.userservice.documents.User;
 import com.hgsplanet.userservice.enums.RelationWithUser;
 import com.hgsplanet.userservice.enums.Role;
+import com.hgsplanet.userservice.model.Favorite;
+import com.hgsplanet.userservice.model.PostLike;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +57,7 @@ public class UserService {
             UserDto userDto = UserDto.toDto(user);
             userDto.setAccountId(user.getAccountId());
             return userDto;
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException("User Not Found");
         }
     }
@@ -64,7 +66,7 @@ public class UserService {
         try {
             User user = userRepository.findByUsername(username);
             return user;
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException("User Not Found");
         }
     }
@@ -122,23 +124,84 @@ public class UserService {
         }
     }
 
-    public Collection<User> findBusinessByCity(String city){
-        Collection<User> users = userRepository.findByCityAndRoles(city, Role.BUSINESS);
-        Collection<UserDto> userDtos = new ArrayList<>();
-        for(User user : users){
-            userDtos.add(UserDto.toDto(user));
-        }
+    public Collection<User> findBusinesses() {
+        Collection<User> users = userRepository.findByRoles(Role.BUSINESS);
         return users;
     }
 
-    public Collection<User> filterBusiness(Double rating, List<String> businessTypes, String city){
+    public Collection<User> findBusinessByCity(String city) {
+        Collection<User> users = userRepository.findByCityAndRoles(city, Role.BUSINESS);
+        return users;
+    }
+
+    public Collection<User> findBusinessByBusinessType(String businessType) {
+        Collection<User> users = userRepository.findByBusinessTypeAndRoles(businessType, Role.BUSINESS);
+        return users;
+    }
+
+    public Collection<User> filterBusiness(Double rating, List<String> businessTypes, String city) {
         Collection<User> users = userRepository.filterBusiness(rating, businessTypes, city, Role.BUSINESS);
         return users;
     }
 
-    public Collection<User> findTopBusinesses(){
+    public Collection<User> findTopBusinesses() {
         Collection<User> users = userRepository.findTop4ByRolesOrderByRatingDesc(Role.BUSINESS);
         System.out.println(users);
         return users;
+    }
+
+    public User changeRating(String businessName, double rating) {
+        Double ratingSum = 0d;
+        User business = userRepository.findByUsername(businessName);
+        Collection<Double> ratings = business.getRatings();
+        ratings.add(rating);
+        business.setRatingCounter(business.getRatingCounter() + 1);
+
+        for (Double tempRating : ratings) {
+            if (tempRating != null) {
+                ratingSum += tempRating;
+            }
+        }
+        business.setRating(ratingSum / business.getRatingCounter());
+        userRepository.save(business);
+        return business;
+    }
+
+    public User likePost(PostLike postLike) {
+        User user = findFullUserByUsername(postLike.getUsername());
+        Collection<PostLike> likes = user.getLikes();
+        if (likes.contains(postLike))
+            likes.remove(postLike);
+        else
+            likes.add(postLike);
+        return userRepository.save(user);
+    }
+
+    public User addFavorite(Favorite favorite) {
+        User user = findFullUserByUsername(favorite.getAccountUsername());
+        User business = findFullUserByUsername(favorite.getFavoriteUsername());
+        Collection<String> fans = business.getFans();
+        Collection<String> favorites = user.getFavorites();
+        if (favorites.contains(favorite.getFavoriteUsername())) {
+            favorites.remove(favorite.getFavoriteUsername());
+            fans.remove(favorite.getAccountUsername());
+        } else {
+            favorites.add(favorite.getFavoriteUsername());
+            fans.add(favorite.getAccountUsername());
+        }
+        userRepository.save(business);
+        return userRepository.save(user);
+    }
+
+    public Collection<User> findFavorites(String username) {
+        User user = findFullUserByUsername(username);
+        Collection<String> favorites = user.getFavorites();
+        Collection<User> businesses = new ArrayList<>();
+        for (String favorite : favorites) {
+            if (favorite != null) {
+                businesses.add(findFullUserByUsername(favorite));
+            }
+        }
+        return businesses;
     }
 }

@@ -50,7 +50,7 @@ public class CommentService {
     }
 
     public Comment getFullComment(String commentId){
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiQlVTSU5FU1MifV0sInN1YiI6Iml6dW5hLWJ1c2luZXNzIiwiaWF0IjoxNjgzNTA2MjgzLCJleHAiOjE2ODM1MDc3MjN9.wbRkzx1ZAvcBZehcAIM_0XVCe-WPMaqnwsECrLCfITU";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2ODQ2OTA4MjAsImV4cCI6MTY4NTI5NTYyMH0.aeReM465Ja26TKzv4ctys0BR4YPynBqd7yrji9G-mCY";
         String authorization = "Bearer "+token;
         Comment comment = commentRepository.findById(commentId).get();
         comment.setUser(userRestClient.findFullUserByUsernameForServices(comment.getAccountUsername(), authorization));

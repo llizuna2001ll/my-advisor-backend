@@ -7,18 +7,23 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="discovey-service" />
         <module name="post-service" />
         <module name="comment-service" />
+        <module name="conversation-service" />
+        <module name="UserMicroservice" />
+        <module name="discovey-service" />
         <module name="user-service" />
         <module name="gateway" />
-        <module name="UserMicroservice" />
+        <module name="notification-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="comment-service" target="17" />
+      <module name="conversation-service" target="17" />
       <module name="discovey-service" target="17" />
       <module name="gateway" target="17" />
+      <module name="message-service" target="17" />
+      <module name="notification-service" target="17" />
       <module name="post-service" target="17" />
       <module name="user-service" target="17" />
       <module name="UserMicroservice" target="17" />
@@ -28,8 +33,11 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="UserMicroservice" options="-parameters" />
       <module name="comment-service" options="-parameters" />
+      <module name="conversation-service" options="-parameters" />
       <module name="discovey-service" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="message-service" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
       <module name="post-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>

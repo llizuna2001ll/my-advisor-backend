@@ -3,11 +3,13 @@ package com.hgsplanet.postservice.service;
 import com.hgsplanet.postservice.dao.PostRepository;
 import com.hgsplanet.postservice.documents.Post;
 import com.hgsplanet.postservice.dto.PostDto;
+import com.hgsplanet.postservice.model.PostLike;
 import com.hgsplanet.postservice.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRestClient userRestClient;
     private final CommentRestClient commentRestClient;
+    private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2ODQ2OTA4MjAsImV4cCI6MTY4NTI5NTYyMH0.aeReM465Ja26TKzv4ctys0BR4YPynBqd7yrji9G-mCY";
 
     @Autowired
     public PostService(PostRepository postRepository, UserRestClient userRestClient, CommentRestClient commentRestClient) {
@@ -25,7 +28,6 @@ public class PostService {
     }
 
     public PostDto addPost(PostDto post){
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiQlVTSU5FU1MifV0sInN1YiI6Iml6dW5hLWJ1c2luZXNzIiwiaWF0IjoxNjgzNTA4MDE0LCJleHAiOjE2ODM1MDk0NTR9.lsNqDl7kzsfEmnEnhsoRSmtZkk0hveaz6EJKk8GILqw";
         String authorization = "Bearer "+token;
         User user = userRestClient.findFullUserByUsernameForServices(post.getAccountUsername(), authorization);
         User business = userRestClient.findFullUserByUsernameForServices(post.getAccountUsername(), authorization);
@@ -53,11 +55,33 @@ public class PostService {
     }
 
     public Post getFullPost(String postId){
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiQlVTSU5FU1MifV0sInN1YiI6Iml6dW5hLWJ1c2luZXNzIiwiaWF0IjoxNjgzNTA4MDE0LCJleHAiOjE2ODM1MDk0NTR9.lsNqDl7kzsfEmnEnhsoRSmtZkk0hveaz6EJKk8GILqw";
         String authorization = "Bearer "+token;
         Post post = postRepository.findById(postId).get();
         post.setUser(userRestClient.findFullUserByUsernameForServices(post.getAccountUsername(), authorization));
         post.setComments(commentRestClient.getAllByPostId(postId));
         return post;
     }
+
+    public Collection<Post> findByBusinessName(String businessName){
+        String authorization = "Bearer "+token;
+        Collection<Post> posts = postRepository.findByBusinessName(businessName);
+        Collection<Post> newPosts = new ArrayList<>();
+        for (Post post: posts) {
+            post.setUser(userRestClient.findFullUserByUsernameForServices(post.getAccountUsername(), authorization));
+            post.setComments(commentRestClient.getAllByPostId(post.getPostId()));
+            newPosts.add(post);
+        }
+        return newPosts;
+    }
+
+    public Post likePost(PostLike postLike){
+        Post post = findPostById(postLike.getPostId());
+        Collection<PostLike> likes = post.getLikes();
+        if(likes.contains(postLike))
+            likes.remove(postLike);
+        else
+            likes.add(postLike);
+        return postRepository.save(post);
+    }
+
 }

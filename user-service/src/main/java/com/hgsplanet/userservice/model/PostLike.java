@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class PostLike {
-    private String postLikeId;
+    private String postId;
+    private String username;
 }

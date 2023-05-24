@@ -16,7 +16,9 @@ public interface UserRepository extends MongoRepository<User, String> {
     @Query("{rating: {$gte: ?0}, businessType: {$in: ?1}, city: ?2, roles: ?3}")
     Collection<User> filterBusiness(Double rating, List<String> businessTypes, String city, Role roles);
     Collection<User> findByCityAndRoles(String city, Role role);
+    Collection<User> findByBusinessTypeAndRoles(String businessType, Role role);
     void deleteByUsername(String username);
+    Collection<User> findByRoles(Role role);
 
     List<User> findTop4ByRolesOrderByRatingDesc(Role roles);
 }

@@ -2,11 +2,13 @@ package com.hgsplanet.postservice.web;
 
 import com.hgsplanet.postservice.dto.PostDto;
 import com.hgsplanet.postservice.documents.Post;
+import com.hgsplanet.postservice.model.PostLike;
 import com.hgsplanet.postservice.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -55,4 +57,17 @@ public class PostRestController {
         Post post = postService.getFullPost(id);
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
+
+    @GetMapping("/byBusinessName/{businessName}")
+    ResponseEntity<Collection<Post>> findByBusinessName(@PathVariable("businessName") String businessName){
+        Collection<Post> posts = postService.findByBusinessName(businessName);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    @PostMapping("/likePost")
+    ResponseEntity<Post> likePost(@RequestBody PostLike postLike){
+        Post post = postService.likePost(postLike);
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
 }
