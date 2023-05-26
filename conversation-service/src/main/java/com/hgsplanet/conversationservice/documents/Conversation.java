@@ -9,8 +9,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -22,9 +24,12 @@ import java.util.Collection;
 public class Conversation {
     @Id
     private String conversationId;
+    @Indexed
     private String userFrom;
-    private String userTo;
+    @Indexed
+    private String username;
     private Collection<Message> messages = new ArrayList<>();
+    private LocalDateTime lastMessageTime;
     @Transient
     private User userFromEntity;
 }

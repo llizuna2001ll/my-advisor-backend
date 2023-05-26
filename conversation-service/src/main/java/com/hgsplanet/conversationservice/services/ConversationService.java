@@ -8,7 +8,9 @@ import com.hgsplanet.conversationservice.web.UserRestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,38 +25,77 @@ public class ConversationService {
         this.userRestClient = userRestClient;
     }
 
-    public Conversation addConversation(Conversation conversation){
+    public Conversation addConversation(Conversation conversation) {
         return conversationRepository.save(conversation);
     }
 
-    public Conversation findConversationById(String id){
-        return conversationRepository.findById(id).orElseThrow(()-> new RuntimeException("Conversation Not Found"));
+    public Conversation findConversationById(String id) {
+        return conversationRepository.findById(id).orElseThrow(() -> new RuntimeException("Conversation Not Found"));
     }
 
-    public List<Conversation> findAllConversations(){
+    public Collection<Conversation> findConversationsByUserTo(String username) {
+        return conversationRepository.findAllByUsername(username);
+    }
+
+    public List<Conversation> findAllConversations() {
         return conversationRepository.findAll();
     }
 
-    public Conversation updateConversation(Conversation conversation){
+    public Conversation updateConversation(Conversation conversation) {
         return conversationRepository.save(conversation);
     }
 
-    public void deleteConversationById(String id){
+    public void deleteConversationById(String id) {
         conversationRepository.deleteById(id);
     }
 
-    public Collection<Conversation> getFullConversations(String username){
+    public Collection<Conversation> getFullConversations(String username) {
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2ODQ5MzA1ODMsImV4cCI6MTY4NTUzNTM4M30.g3g693jUqQB8c_3SgLjyEs6Et6WaYlQsgCzHChkFAVs";
-        String authorization = "Bearer "+token;
-        Collection<Conversation> conversations = conversationRepository.findAllByUserTo(username);
-        for (Conversation conversation : conversations){
+        String authorization = "Bearer " + token;
+        Collection<Conversation> conversations = conversationRepository.findAllByUsername(username);
+        for (Conversation conversation : conversations) {
             conversation.setUserFromEntity(userRestClient.findFullUserByUsernameForServices(conversation.getUserFrom(), authorization));
         }
         return conversations;
     }
 
-    public Collection<Message> getMessages(String userTo, String userFrom){
-        Conversation conversation = conversationRepository.findByUserFromAndUserTo(userFrom, userTo);
+    public Collection<Message> addMessage(Message message, String username, String userFrom) {
+        Conversation userFromConversation = conversationRepository.findByUserFromAndUsername(userFrom, username);
+        Conversation userToConversation = conversationRepository.findByUserFromAndUsername(username, userFrom);
+
+        if (userFromConversation == null) {
+            Conversation newConversation1 = Conversation.builder()
+                    .username(username)
+                    .userFrom(userFrom)
+                    .messages(new ArrayList<>())
+                    .build();
+
+            Conversation newConversation2 = Conversation.builder()
+                    .username(userFrom)
+                    .userFrom(username)
+                    .messages(new ArrayList<>())
+                    .build();
+
+            userFromConversation = conversationRepository.save(newConversation1);
+            userToConversation = conversationRepository.save(newConversation2);
+        }
+
+        Collection<Message> messages = userFromConversation.getMessages();
+        messages.add(message);
+        
+        userToConversation.setMessages(messages);
+        userFromConversation.setMessages(messages);
+
+        userToConversation.setLastMessageTime(LocalDateTime.now());
+        userFromConversation.setLastMessageTime(LocalDateTime.now());
+        conversationRepository.saveAll(Arrays.asList(userFromConversation, userToConversation));
+
+        return messages;
+    }
+
+
+    public Collection<Message> getMessages(String username, String userFrom) {
+        Conversation conversation = conversationRepository.findByUserFromAndUsername(userFrom, username);
         return conversation.getMessages();
     }
 }

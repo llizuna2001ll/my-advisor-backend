@@ -26,13 +26,6 @@ public class ConversationRestController {
         return new ResponseEntity<>(conversations, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<Conversation> getConversationById(@PathVariable String id){
-        Conversation conversation = conversationService.findConversationById(id);
-        return new ResponseEntity<>(conversation, HttpStatus.OK);
-    }
-
-
     @PostMapping("/addConversation")
     ResponseEntity<Conversation> addConversation(@RequestBody Conversation conversation){
         Conversation newConversation = conversationService.addConversation(conversation);
@@ -51,17 +44,22 @@ public class ConversationRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/getFullConversation/{username}")
+    @GetMapping("/{username}")
     ResponseEntity<Collection<Conversation>> getFullConversation(@PathVariable("username") String username){
-        Collection<Conversation> conversations = conversationService.getFullConversations(username);
+        Collection<Conversation> conversations = conversationService.findConversationsByUserTo(username);
         return new ResponseEntity<>(conversations, HttpStatus.OK);
     }
 
-    @GetMapping("/getFullConversation/{userTo}")
-    ResponseEntity<Collection<Message>> getMessages(@RequestParam String userFrom, @PathVariable("userTo") String userTo){
-        Collection<Message> messages = conversationService.getMessages(userTo, userFrom);
+    @GetMapping("/messages/{username}/{userFrom}")
+    ResponseEntity<Collection<Message>> getMessages(@PathVariable String userFrom, @PathVariable("username") String username){
+        Collection<Message> messages = conversationService.getMessages(username, userFrom);
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
-}
+    @PostMapping("/addMessage/{username}/{userFrom}")
+    ResponseEntity<Message> addMessage(@RequestBody Message message, @PathVariable String userFrom, @PathVariable String username){
+        conversationService.addMessage(message, username, userFrom);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
+    }
 
+}

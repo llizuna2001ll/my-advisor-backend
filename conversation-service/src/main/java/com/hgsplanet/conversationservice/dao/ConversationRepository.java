@@ -8,6 +8,6 @@ import java.util.Collection;
 
 @RepositoryRestResource
 public interface ConversationRepository extends MongoRepository<Conversation, String> {
-    Collection<Conversation> findAllByUserTo(String userTo);
-    Conversation findByUserFromAndUserTo(String userFrom, String userTo);
+    Collection<Conversation> findAllByUsername(String username);
+    Conversation findByUserFromAndUsername(String userFrom, String userTo);
 }
