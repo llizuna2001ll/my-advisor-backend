@@ -30,6 +30,7 @@ public class Conversation {
     private String username;
     private Collection<Message> messages = new ArrayList<>();
     private LocalDateTime lastMessageTime;
+    private boolean hasUnreadMessage = false;
     @Transient
     private User userFromEntity;
 }

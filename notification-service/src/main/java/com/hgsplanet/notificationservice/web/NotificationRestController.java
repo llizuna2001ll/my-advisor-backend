@@ -50,21 +50,9 @@ public class NotificationRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/getFullNotification/{id}")
-    ResponseEntity<Notification> getFullNotification(@PathVariable("id") String id){
-        Notification notification = notificationService.getFullNotification(id);
-        return new ResponseEntity<>(notification, HttpStatus.OK);
-    }
-
-    @GetMapping("/getAlertNotifications")
-    ResponseEntity<Collection<Notification>> findAlertNotificationByUsername(@RequestParam String username){
-        Collection<Notification> notifications = notificationService.findAlertNotificationByUsername(username);
-        return new ResponseEntity<>(notifications, HttpStatus.OK);
-    }
-
-    @GetMapping("/getMessageNotifications")
-    ResponseEntity<Collection<Notification>> findMessageNotificationByUsername(@RequestParam String username){
-        Collection<Notification> notifications = notificationService.findMessageNotificationByUsername(username);
+    @GetMapping("/getFullNotification/{username}")
+    ResponseEntity<Collection<Notification>> getFullNotification(@PathVariable("username") String username){
+        Collection<Notification> notifications = notificationService.getFullNotification(username);
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 }

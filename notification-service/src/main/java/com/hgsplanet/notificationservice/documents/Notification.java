@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @NoArgsConstructor
@@ -19,7 +20,8 @@ public class Notification {
     @Id
     private String notificationId;
     private String userFrom;
-    private String userTo;
+    @Indexed
+    private String username;
     private String postId;
     private String notificationObject;
     @Transient

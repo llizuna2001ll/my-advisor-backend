@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 public class ConversationService {
-    private final ConversationRepository conversationRepository;
+    private final ConversationRepository conversationRepository;    
     private final UserRestClient userRestClient;
 
     @Autowired
@@ -50,7 +50,7 @@ public class ConversationService {
     }
 
     public Collection<Conversation> getFullConversations(String username) {
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2ODQ5MzA1ODMsImV4cCI6MTY4NTUzNTM4M30.g3g693jUqQB8c_3SgLjyEs6Et6WaYlQsgCzHChkFAVs";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2ODYxNDAwODYsImV4cCI6MTY4Njc0NDg4Nn0.L22BDX1y4b3WfCxCcMGSEm81z6dE705iB3XKjmbpkpc";
         String authorization = "Bearer " + token;
         Collection<Conversation> conversations = conversationRepository.findAllByUsername(username);
         for (Conversation conversation : conversations) {
@@ -86,6 +86,7 @@ public class ConversationService {
         userToConversation.setMessages(messages);
         userFromConversation.setMessages(messages);
 
+        userToConversation.setHasUnreadMessage(true);
         userToConversation.setLastMessageTime(LocalDateTime.now());
         userFromConversation.setLastMessageTime(LocalDateTime.now());
         conversationRepository.saveAll(Arrays.asList(userFromConversation, userToConversation));
@@ -97,5 +98,12 @@ public class ConversationService {
     public Collection<Message> getMessages(String username, String userFrom) {
         Conversation conversation = conversationRepository.findByUserFromAndUsername(userFrom, username);
         return conversation.getMessages();
+    }
+
+    public Conversation setMessageUnread(String id){
+        Conversation conversation = findConversationById(id);
+        conversation.setHasUnreadMessage(false);
+        conversationRepository.save(conversation);
+        return conversation;
     }
 }

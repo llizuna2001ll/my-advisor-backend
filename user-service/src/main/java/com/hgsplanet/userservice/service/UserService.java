@@ -146,7 +146,6 @@ public class UserService {
 
     public Collection<User> findTopBusinesses() {
         Collection<User> users = userRepository.findTop4ByRolesOrderByRatingDesc(Role.BUSINESS);
-        System.out.println(users);
         return users;
     }
 

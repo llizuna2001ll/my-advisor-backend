@@ -30,14 +30,6 @@ public class NotificationService {
         return notificationRepository.findById(id).orElseThrow(()-> new RuntimeException("Notification Not Found"));
     }
 
-    public Collection<Notification> findAlertNotificationByUsername(String username){
-        return notificationRepository.findAllByUserToAndNotificationType(username, NotificationType.ALERT);
-    }
-
-    public Collection<Notification> findMessageNotificationByUsername(String username){
-        return notificationRepository.findAllByUserToAndNotificationType(username, NotificationType.MESSAGE);
-    }
-
     public List<Notification> findAllNotifications(){
         return notificationRepository.findAll();
     }
@@ -50,11 +42,13 @@ public class NotificationService {
         notificationRepository.deleteById(id);
     }
 
-    public Notification getFullNotification(String notificationId){
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2ODQ2OTA4MjAsImV4cCI6MTY4NTI5NTYyMH0.aeReM465Ja26TKzv4ctys0BR4YPynBqd7yrji9G-mCY";
+    public Collection<Notification> getFullNotification(String username){
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2ODYxNDAwODYsImV4cCI6MTY4Njc0NDg4Nn0.L22BDX1y4b3WfCxCcMGSEm81z6dE705iB3XKjmbpkpc";
         String authorization = "Bearer "+token;
-        Notification notification = notificationRepository.findById(notificationId).get();
-        notification.setUserFromEntity(userRestClient.findFullUserByUsernameForServices(notification.getUserFrom(), authorization));
-        return notification;
+        Collection<Notification> notifications = notificationRepository.findAllByUsername(username);
+        for (Notification n : notifications){
+            n.setUserFromEntity(userRestClient.findFullUserByUsernameForServices(n.getUserFrom(), authorization));
+        }
+        return notifications;
     }
 }

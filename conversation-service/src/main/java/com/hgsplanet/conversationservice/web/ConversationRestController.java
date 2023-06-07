@@ -59,7 +59,13 @@ public class ConversationRestController {
     @PostMapping("/addMessage/{username}/{userFrom}")
     ResponseEntity<Message> addMessage(@RequestBody Message message, @PathVariable String userFrom, @PathVariable String username){
         conversationService.addMessage(message, username, userFrom);
-        return new ResponseEntity<>(message, HttpStatus.CREATED);
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    @PostMapping("/unreadMessage/{id}")
+    ResponseEntity<Conversation> setMessageUnread(@PathVariable String id){
+        Conversation conversation = conversationService.setMessageUnread(id);
+        return new ResponseEntity<>(conversation, HttpStatus.OK);
     }
 
 }

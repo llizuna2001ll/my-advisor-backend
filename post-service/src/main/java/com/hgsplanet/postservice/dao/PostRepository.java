@@ -10,4 +10,5 @@ import java.util.Collection;
 
 public interface PostRepository extends MongoRepository<Post, String> {
     Collection<Post> findByBusinessName(String businessName);
+    Collection<Post> findByAccountUsername(String username);
 }

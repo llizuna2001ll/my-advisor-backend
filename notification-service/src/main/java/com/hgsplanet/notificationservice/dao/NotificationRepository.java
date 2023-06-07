@@ -9,5 +9,5 @@ import java.util.Collection;
 
 @RepositoryRestResource
 public interface NotificationRepository extends MongoRepository<Notification, String> {
-    Collection<Notification> findAllByUserToAndNotificationType(String username, NotificationType notificationType);
+    Collection<Notification> findAllByUsername(String username);
 }

@@ -39,8 +39,7 @@ public class UserRestController {
 
     @GetMapping("/services/{username}")
     User getUserByUsernameForServices(@PathVariable String username) {
-        User user = userService.findFullUserByUsername(username);
-        return user;
+        return userService.findFullUserByUsername(username);
     }
 
     @PostMapping("/addUser")
