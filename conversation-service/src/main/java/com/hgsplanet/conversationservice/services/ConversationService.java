@@ -50,7 +50,7 @@ public class ConversationService {
     }
 
     public Collection<Conversation> getFullConversations(String username) {
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2ODYxNDAwODYsImV4cCI6MTY4Njc0NDg4Nn0.L22BDX1y4b3WfCxCcMGSEm81z6dE705iB3XKjmbpkpc";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2OTMxODYxNjAsImV4cCI6MTY5Mzc5MDk2MH0.cK6ieJjy5HJ19N9FBjig52N62f1FSzoBHkmwiPL7mow";
         String authorization = "Bearer " + token;
         Collection<Conversation> conversations = conversationRepository.findAllByUsername(username);
         for (Conversation conversation : conversations) {

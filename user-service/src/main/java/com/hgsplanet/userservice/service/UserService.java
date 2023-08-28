@@ -150,7 +150,7 @@ public class UserService {
     }
 
     public User changeRating(String businessName, double rating) {
-        Double ratingSum = 0d;
+        double ratingSum = 0d;
         User business = userRepository.findByUsername(businessName);
         Collection<Double> ratings = business.getRatings();
         ratings.add(rating);

@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("api/v1/posts")
 public class PostRestController {
 
-    private PostService postService;
+    private final PostService postService;
 
     public PostRestController(PostService postService) {
         this.postService = postService;
