@@ -18,11 +18,12 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRestClient userRestClient;
     private final CommentRestClient commentRestClient;
-    private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2ODYxNDAwODYsImV4cCI6MTY4Njc0NDg4Nn0.L22BDX1y4b3WfCxCcMGSEm81z6dE705iB3XKjmbpkpc";
+    private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2OTEyNDc5OTEsImV4cCI6MTY5MTg1Mjc5MX0.jZhAxZzob_6hQ6N0zdqA_4fjxMD0My0M6xAMqVoExXc";
 
     @Autowired
     public PostService(PostRepository postRepository, UserRestClient userRestClient, CommentRestClient commentRestClient) {
         this.postRepository = postRepository;
+
         this.userRestClient = userRestClient;
         this.commentRestClient = commentRestClient;
     }
