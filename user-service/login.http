@@ -1,0 +1,9 @@
+POST http://localhost:8888/api/v1/auth/authenticate
+Content-Type: application/json
+
+{
+  "username": "izuna-test1",
+  "password": "123456"
+}
+
+###

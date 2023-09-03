@@ -43,7 +43,11 @@ public class NotificationService {
     }
 
     public Collection<Notification> getFullNotification(String username){
+<<<<<<< HEAD
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2OTEyNDc5OTEsImV4cCI6MTY5MTg1Mjc5MX0.jZhAxZzob_6hQ6N0zdqA_4fjxMD0My0M6xAMqVoExXc";
+=======
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2OTMxODYxNjAsImV4cCI6MTY5Mzc5MDk2MH0.cK6ieJjy5HJ19N9FBjig52N62f1FSzoBHkmwiPL7mow";
+>>>>>>> d3d18c69f8e83f080373a88c5bda9daac94d06cb
         String authorization = "Bearer "+token;
         Collection<Notification> notifications = notificationRepository.findAllByUsername(username);
         for (Notification n : notifications){
