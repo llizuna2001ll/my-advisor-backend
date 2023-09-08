@@ -9,20 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PostService {
     private final PostRepository postRepository;
     private final UserRestClient userRestClient;
     private final CommentRestClient commentRestClient;
-<<<<<<< HEAD
-    private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2OTEyNDc5OTEsImV4cCI6MTY5MTg1Mjc5MX0.jZhAxZzob_6hQ6N0zdqA_4fjxMD0My0M6xAMqVoExXc";
-=======
-    private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2OTMxODYxNjAsImV4cCI6MTY5Mzc5MDk2MH0.cK6ieJjy5HJ19N9FBjig52N62f1FSzoBHkmwiPL7mow";
->>>>>>> d3d18c69f8e83f080373a88c5bda9daac94d06cb
+    private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdCIsImlhdCI6MTY5Mzc3MjI1NSwiZXhwIjoxNjk0Mzc3MDU1fQ.zrCa07tgrgBFxqyiSzUuCwaFUHjCGEWecvJGG3KVQXo";
 
     @Autowired
     public PostService(PostRepository postRepository, UserRestClient userRestClient, CommentRestClient commentRestClient) {
@@ -39,12 +33,11 @@ public class PostService {
         System.out.println(user.getUsername());
         System.out.println(business.getUsername());
         post.setPostDate(LocalDateTime.now());
-
         return PostDto.toDto(postRepository.save(Post.toEntity(post)));
     }
 
     public Post findPostById(String id){
-        return postRepository.findById(id).orElseThrow(()-> new RuntimeException("Post Not Found"));
+        return postRepository.findById(id).orElseThrow(()-> new RuntimeException("Post Not Found"+id));
     }
 
     public List<Post> findAllPosts(){
@@ -86,6 +79,14 @@ public class PostService {
             likes.remove(postLike);
         else
             likes.add(postLike);
+        return postRepository.save(post);
+    }
+
+    public Post reportPost(String postId, String reporter, String reason){
+        Post post = findPostById(postId);
+        Map<String, String> reports = post.getReports();
+        reports.put(reporter, reason);
+        post.setReports(reports);
         return postRepository.save(post);
     }
 

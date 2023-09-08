@@ -8,6 +8,8 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Builder
 @AllArgsConstructor
@@ -21,6 +23,7 @@ public class PostDto implements Serializable {
     private String postImgPath;
     private String accountUsername;
     private String businessName;
+    private Map<String, String> reports = new HashMap<>();
 
     public static PostDto toDto(Post post){
         return PostDto.builder()
@@ -32,6 +35,7 @@ public class PostDto implements Serializable {
                 .accountUsername(post.getAccountUsername())
                 .businessName(post.getBusinessName())
                 .postRating(post.getPostRating())
+                .reports(post.getReports())
                 .build();
     }
 }

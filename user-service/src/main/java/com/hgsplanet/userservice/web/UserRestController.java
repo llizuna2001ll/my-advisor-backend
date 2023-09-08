@@ -1,6 +1,7 @@
 package com.hgsplanet.userservice.web;
 
 import com.hgsplanet.userservice.enums.RelationWithUser;
+import com.hgsplanet.userservice.model.AssignCityRequest;
 import com.hgsplanet.userservice.model.Favorite;
 import com.hgsplanet.userservice.model.PostLike;
 import com.hgsplanet.userservice.service.UserService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.List;
@@ -66,10 +68,10 @@ public class UserRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/addCity")
-    ResponseEntity<UserDto> addCity(@RequestParam String username, @RequestParam String cityId, @RequestParam RelationWithUser relationWithUser) {
-        userService.assignCity(username, cityId, relationWithUser);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping("/addCity/{username}")
+    ResponseEntity<Collection<AssignCityRequest>> addCity(@PathVariable String username, @RequestBody Collection<AssignCityRequest> assignCityRequests) {
+        userService.assignCity(username, assignCityRequests);
+        return new ResponseEntity<>(assignCityRequests, HttpStatus.OK);
     }
 
     @PostMapping("/removeCity")
@@ -121,13 +123,13 @@ public class UserRestController {
     }
 
     @PostMapping("/likePost")
-    ResponseEntity<User> likePost(@RequestBody PostLike postLike){
+    ResponseEntity<User> likePost(@RequestBody PostLike postLike) {
         User user = userService.likePost(postLike);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("/addFavorite")
-    ResponseEntity<User> addFavorite(@RequestBody Favorite favorite){
+    ResponseEntity<User> addFavorite(@RequestBody Favorite favorite) {
         User user = userService.addFavorite(favorite);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -135,6 +137,22 @@ public class UserRestController {
     @GetMapping("/{username}/getFavorites")
     ResponseEntity<Collection<User>> findFavorites(@PathVariable String username) {
         Collection<User> users = userService.findFavorites(username);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @PostMapping("/uploadProfilePicture/{username}")
+    public ResponseEntity<String> uploadProfilePicture(@RequestParam(value = "file") MultipartFile file, @PathVariable String username) {
+        return new ResponseEntity<>(userService.uploadProfilePicture(file, username), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/DeleteProfilePicture/{fileName}")
+    public ResponseEntity<String> deleteProfilePicture(@PathVariable String fileName) {
+        return new ResponseEntity<>(userService.deleteProfilePicture(fileName), HttpStatus.OK);
+    }
+
+    @GetMapping("/businesses/{username}")
+    ResponseEntity<Collection<User>> findBusinessesByUsername(@PathVariable String username) {
+        Collection<User> users = userService.findBusinessesByUsername(username);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 }

@@ -21,4 +21,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     Collection<User> findByRoles(Role role);
 
     List<User> findTop4ByRolesOrderByRatingDesc(Role roles);
+
+    Collection<User> findByUsernameContainingAndRoles(String username, Role roles);
 }

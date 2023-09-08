@@ -1,5 +1,10 @@
 package com.hgsplanet.userservice.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import com.hgsplanet.userservice.dao.CityRepository;
 import com.hgsplanet.userservice.dao.UserRepository;
 import com.hgsplanet.userservice.documents.City;
@@ -8,12 +13,19 @@ import com.hgsplanet.userservice.dto.UserDto;
 import com.hgsplanet.userservice.documents.User;
 import com.hgsplanet.userservice.enums.RelationWithUser;
 import com.hgsplanet.userservice.enums.Role;
+import com.hgsplanet.userservice.model.AssignCityRequest;
 import com.hgsplanet.userservice.model.Favorite;
 import com.hgsplanet.userservice.model.PostLike;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,14 +33,19 @@ import java.util.Map;
 
 @Service
 @Transactional
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final CityRepository cityRepository;
+    @Value("${application.bucket.name}")
+    private String bucketName;
+    private AmazonS3 s3Client;
 
     @Autowired
-    public UserService(UserRepository userRepository, CityRepository cityRepository) {
+    public UserService(UserRepository userRepository, CityRepository cityRepository, AmazonS3 s3Client) {
         this.userRepository = userRepository;
         this.cityRepository = cityRepository;
+        this.s3Client = s3Client;
     }
 
     public UserDto addUser(UserDto user) {
@@ -83,16 +100,18 @@ public class UserService {
         userRepository.deleteByUsername(username);
     }
 
-    public void assignCity(String username, String cityId, RelationWithUser relationWithUser) {
-        try {
-            User user = userRepository.findByUsername(username);
-            Map<String, RelationWithUser> cities = user.getVisitedCities();
-            City city = cityRepository.findById(cityId).orElseThrow(() -> new RuntimeException("City Not Found"));
-            cities.put(city.getName(), relationWithUser);
-            user.setVisitedCities(cities);
-            userRepository.save(user);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("User Not Found");
+    public void assignCity(String username, Collection<AssignCityRequest> assignCityRequests) {
+        User user = userRepository.findByUsername(username);
+        Map<String, RelationWithUser> cities = user.getVisitedCities();
+        for (AssignCityRequest assignCityRequest : assignCityRequests) {
+            try {
+                City city = cityRepository.findById(assignCityRequest.getCityId()).orElseThrow(() -> new RuntimeException("City Not Found"));
+                cities.put(city.getName(), assignCityRequest.getRelationWithUser());
+                user.setVisitedCities(cities);
+                userRepository.save(user);
+            } catch (RuntimeException e) {
+                throw new RuntimeException("User Not Found");
+            }
         }
     }
 
@@ -149,6 +168,10 @@ public class UserService {
         return users;
     }
 
+    public Collection<User> findBusinessesByUsername(String username){
+        return userRepository.findByUsernameContainingAndRoles(username, Role.BUSINESS);
+    }
+
     public User changeRating(String businessName, double rating) {
         double ratingSum = 0d;
         User business = userRepository.findByUsername(businessName);
@@ -202,5 +225,32 @@ public class UserService {
             }
         }
         return businesses;
+    }
+
+    public String uploadProfilePicture(MultipartFile file, String username) {
+        File fileObj = convertMultiPartFileToFile(file);
+        String fileName = "profilepictures/" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        s3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
+        fileObj.delete();
+        User user = userRepository.findByUsername(username);
+        user.setProfileImgPath(fileName);
+        userRepository.save(user);
+        return "File uploaded : " + fileName;
+    }
+
+    public String deleteProfilePicture(String fileName) {
+        s3Client.deleteObject(bucketName, "profilepictures/" +fileName);
+        return fileName + " removed ...";
+    }
+
+
+    private File convertMultiPartFileToFile(MultipartFile file) {
+        File convertedFile = new File(file.getOriginalFilename());
+        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
+            fos.write(file.getBytes());
+        } catch (IOException e) {
+            log.error("Error converting multipartFile to file", e);
+        }
+        return convertedFile;
     }
 }

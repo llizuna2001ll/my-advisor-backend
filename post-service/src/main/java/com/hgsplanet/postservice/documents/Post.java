@@ -16,6 +16,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,6 +36,8 @@ public class Post{
     private Collection<PostLike> likes = new ArrayList<>();
     private String accountUsername;
     private String businessName;
+    private Map<String, String> reports = new HashMap<>();
+
     @Transient
     User user;
 
@@ -48,6 +52,7 @@ public class Post{
                 .accountUsername(post.getAccountUsername())
                 .businessName(post.getBusinessName())
                 .postRating(post.getPostRating())
+                .reports(post.getReports())
                 .build();
     }
 }

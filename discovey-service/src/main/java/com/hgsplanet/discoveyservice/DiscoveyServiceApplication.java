@@ -12,3 +12,5 @@ public class DiscoveyServiceApplication {
         SpringApplication.run(DiscoveyServiceApplication.class, args);
     }
 }
+
+

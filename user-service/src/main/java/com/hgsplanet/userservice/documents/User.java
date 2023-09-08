@@ -38,7 +38,7 @@ public class User implements UserDetails {
     private String profileImgPath;
     private String phoneNum;
 
-    //Exclusif for business users
+    //Exclusif for businesses
     private String businessDescription;
     private String city;
     private String openingTime;
@@ -69,6 +69,7 @@ public class User implements UserDetails {
                 .creationTime(user.getCreationTime())
                 .profileImgPath(user.getProfileImgPath())
                 .phoneNum(user.getPhoneNum())
+                .visitedCities(user.getVisitedCities())
                 .build();
     }
 

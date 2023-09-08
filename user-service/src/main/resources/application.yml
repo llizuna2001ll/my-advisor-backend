@@ -1,0 +1,22 @@
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAQ4ELPGT7UYVJS7XZ
+      secret-key: 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
+    region:
+      static: eu-north-1
+    stack:
+      auto: false
+
+application:
+  bucket:
+    name: myadvisorbucket
+
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2MB
+      max-file-size: 5MB
+      max-request-size: 10MB

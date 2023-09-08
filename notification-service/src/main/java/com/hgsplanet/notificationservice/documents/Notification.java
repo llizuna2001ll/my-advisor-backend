@@ -2,10 +2,7 @@ package com.hgsplanet.notificationservice.documents;
 
 import com.hgsplanet.notificationservice.enums.NotificationType;
 import com.hgsplanet.notificationservice.models.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -24,6 +21,6 @@ public class Notification {
     private String username;
     private String postId;
     private String notificationObject;
-    @Transient
-    private User userFromEntity;
+    @Builder.Default
+    private Boolean seen = false;
 }

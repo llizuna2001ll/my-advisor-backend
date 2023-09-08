@@ -55,4 +55,9 @@ public class NotificationRestController {
         Collection<Notification> notifications = notificationService.getFullNotification(username);
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
+    @PostMapping("/setSeen/{username}")
+    ResponseEntity<Collection<Notification>> setNotificationSeen(@PathVariable("username") String username){
+        Collection<Notification> notifications = notificationService.setNotificationSeen(username);
+        return new ResponseEntity<>(notifications, HttpStatus.OK);
+    }
 }

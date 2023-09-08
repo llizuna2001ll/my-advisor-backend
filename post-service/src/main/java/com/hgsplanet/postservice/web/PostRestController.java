@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/posts")
@@ -69,5 +70,14 @@ public class PostRestController {
         Post post = postService.likePost(postLike);
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
-
+    @PostMapping("/reportPost/{postId}")
+    ResponseEntity<Post> reportPost(
+            @PathVariable String postId,
+            @RequestBody Map<String, String> requestBody
+    ) {
+        String reporter = requestBody.get("reporter");
+        String reason = requestBody.get("reason");
+        Post post = postService.reportPost(postId, reporter, reason);
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
 }
