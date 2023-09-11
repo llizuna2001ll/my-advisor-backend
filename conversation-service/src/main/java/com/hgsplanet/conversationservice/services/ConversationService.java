@@ -19,6 +19,8 @@ public class ConversationService {
     private final ConversationRepository conversationRepository;    
     private final UserRestClient userRestClient;
 
+    private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2OTQ0MzQyOTAsImV4cCI6MTY5NTAzOTA5MH0.33jYen0jEF4gf3c11BO0rZ7sa_uR_60-0EucgpDnN1k";
+
     @Autowired
     public ConversationService(ConversationRepository conversationRepository, UserRestClient userRestClient) {
         this.conversationRepository = conversationRepository;
@@ -34,7 +36,12 @@ public class ConversationService {
     }
 
     public Collection<Conversation> findConversationsByUserTo(String username) {
-        return conversationRepository.findAllByUsername(username);
+        String authorization = "Bearer "+token;
+        Collection<Conversation> conversations = conversationRepository.findAllByUsername(username);
+        for (Conversation conversation : conversations) {
+            conversation.setUserFromEntity(userRestClient.findFullUserByUsernameForServices(conversation.getUserFrom(), authorization));
+        }
+        return conversations;
     }
 
     public List<Conversation> findAllConversations() {
@@ -50,7 +57,6 @@ public class ConversationService {
     }
 
     public Collection<Conversation> getFullConversations(String username) {
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoiaXp1bmEtdGVzdDEiLCJpYXQiOjE2OTM3NjY5ODksImV4cCI6MTY5NDM3MTc4OX0.3xBRzbc10UFYtM2wxx5eIf7bqjiw55Yo1V2aOzTPgco";
         String authorization = "Bearer " + token;
         Collection<Conversation> conversations = conversationRepository.findAllByUsername(username);
         for (Conversation conversation : conversations) {
@@ -96,7 +102,9 @@ public class ConversationService {
 
 
     public Collection<Message> getMessages(String username, String userFrom) {
+        String authorization = "Bearer " + token;
         Conversation conversation = conversationRepository.findByUserFromAndUsername(userFrom, username);
+        conversation.setUserFromEntity(userRestClient.findFullUserByUsernameForServices(conversation.getUserFrom(), authorization));
         return conversation.getMessages();
     }
 
